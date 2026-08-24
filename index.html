@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataExpress Ghana | Real-Time Telco Portal</title>
+    <!-- Paystack Inline Popup Script -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <style>
+        :root {
+            --bg: #0b0f17;
+            --card-bg: #161f30;
+            --card-border: #223048;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --accent-mtn: #eab308;
+            --accent-telecel: #f43f5e;
+            --accent-at: #38bdf8;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --header-bg: #0f172a;
+            --input-bg: #0f172a;
+        }
+
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent-mtn: #ca8a04;
+            --accent-telecel: #e11d48;
+            --accent-at: #0284c7;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --header-bg: #ffffff;
+            --input-bg: #f1f5f9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Header Navigation */
+        header {
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            font-weight: 900;
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            box-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+        }
+
+        .header-widgets {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .daily-sales-badge {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* Active Subscriptions Header Badges */
+        .header-sub-badge {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .header-exp-badge {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .theme-toggle-btn {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+            border: 1px solid var(--card-border);
+            padding: 0.5rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Network Switcher */
+        .network-bar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1.2rem 1rem;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--card-border);
+            flex-wrap: wrap;
+        }
+
+        .net-btn {
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            padding: 0.6rem 1.4rem;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .net-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .net-btn.active-mtn { 
+            border-color: var(--accent-mtn); 
+            background: rgba(234, 179, 8, 0.15); 
+            color: var(--accent-mtn); 
+            box-shadow: 0 0 12px rgba(234, 179, 8, 0.2);
+        }
+        .net-btn.active-telecel { 
+            border-color: var(--accent-telecel); 
+            background: rgba(244, 63, 94, 0.15); 
+            color: var(--accent-telecel); 
+            box-shadow: 0 0 12px rgba(244, 63, 94, 0.2);
+        }
+        .net-btn.active-at { 
+            border-color: var(--accent-at); 
+            background: rgba(56, 189, 248, 0.15); 
+            color: var(--accent-at); 
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+        }
+
+        /* Main Container Views */
+        main {
+            max-width: 1050px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .view-panel {
+            display: none;
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        /* Category Filter */
+        .category-bar {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .cat-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cat-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .cat-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        /* Active Offers Banner Styling */
+        .offers-banner {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.05));
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .offers-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .offers-badge {
+            background: var(--danger);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        /* Bundle Grid Layout */
+        .bundle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .bundle-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 1.4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .bundle-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .bundle-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .bundle-card:hover::before {
+            opacity: 1;
+        }
+
+        .bundle-size {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .bundle-validity {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .bundle-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 1.2rem;
+        }
+
+        .buy-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.65rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .buy-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Quick Airtime Chips */
+        .quick-chip {
+            background: var(--input-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+            text-align: center;
+        }
+
+        .quick-chip:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Form & Cards Universal UI */
+        .panel-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 1.75rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--input-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-action {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn-action:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Responsive Tables */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        th {
+            background: var(--input-bg);
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            color: var(--text-primary);
+        }
+
+        .badge-status-p {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .status-success { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.3); }
+
+        /* Modal Overlay Universal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            width: 100%;
+            max-width: 440px;
+            border-radius: 14px;
+            padding: 1.75rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.2rem;
+        }
+
+        .cancel-btn {
+            background: var(--input-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--card-border);
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 50%;
+            transition: all 0.2s;
+        }
+
+        .cancel-btn:hover {
+            background: var(--card-border);
+            color: var(--text-primary);
+        }
+
+        /* Notification Popup System */
+        .popup-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .popup-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .popup-body {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+            white-space: pre-line;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--header-bg);
+            border-top: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 600px) {
+            header { flex-direction: column; align-items: flex-start; }
+            .header-widgets { width: 100%; justify-content: flex-start; }
+            .nav-links { width: 100%; justify-content: space-between; margin-top: 0.5rem; }
+            .net-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <span class="logo-badge">DX</span>
+            <div>
+                <div class="logo-text">DataExpress GH</div>
+                <span style="font-size: 0.75rem; color: var(--text-secondary);">Automated Telco Data Portal</span>
+            </div>
+        </div>
+
+        <div class="header-widgets">
+            <div class="header-sub-badge" title="Active Plans">
+                <span>Active:</span>
+                <strong id="active-subs-count">0</strong>
+            </div>
+            <div class="header-exp-badge" title="Expiring Soon">
+                <span>Expiring:</span>
+                <strong id="expiring-plans-count">0</strong>
+            </div>
+            <div class="daily-sales-badge">
+                <span>Daily Sales:</span>
+                <strong id="daily-sales-amount">GH₵ 0.00</strong>
+            </div>
+            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+        </div>
+
+        <div class="nav-links">
+            <button class="nav-btn active" onclick="showView('view-bundles', this)">Bundles</button>
+            <button class="nav-btn" onclick="showView('view-airtime', this)">Buy Airtime</button>
+            <button class="nav-btn" onclick="showView('view-track', this)">Track Order</button>
+            <button class="nav-btn" id="nav-merchant-btn" style="display: none;" onclick="showView('view-merchant', this)">Sub-Merchant Hub</button>
+            <button class="nav-btn" onclick="showView('view-history', this)">History</button>
+        </div>
+    </header>
+
+    <!-- NETWORK SELECTOR (Visible under Store view) -->
+    <div id="network-bar-container" class="network-bar">
+        <button class="net-btn active-mtn" id="btn-mtn" onclick="selectNetwork('MTN')">🟡 MTN Ghana</button>
+        <button class="net-btn" id="btn-telecel" onclick="selectNetwork('Telecel')">🔴 Telecel</button>
+        <button class="net-btn" id="btn-at" onclick="selectNetwork('AT')">🔵 AT Ghana</button>
+    </div>
+
+    <main>
+        <!-- VIEW 1: BUNDLES STOREFRONT -->
+        <div id="view-bundles" class="view-panel active">
+            <!-- Active Offers Container (Main Dashboard Only) -->
+            <div id="active-offers-container" style="display: none;">
+                <div class="offers-banner">
+                    <div>
+                        <div class="offers-title">🔥 Active Promos & Special Offers <span class="offers-badge">Limited Time</span></div>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">Get double data value on selected monthly packages and instant top-ups today!</p>
+                    </div>
+                    <button class="cat-btn active" style="margin-bottom: 0;" onclick="filterCategory('Offers', this)">View Special Offers</button>
+                </div>
+            </div>
+
+            <div class="category-bar">
+                <button class="cat-btn active" onclick="filterCategory('All', this)">All Bundles</button>
+                <button class="cat-btn" onclick="filterCategory('Daily', this)">Daily</button>
+                <button class="cat-btn" onclick="filterCategory('Weekly', this)">Weekly</button>
+                <button class="cat-btn" onclick="filterCategory('Monthly', this)">Monthly</button>
+                <button class="cat-btn" onclick="filterCategory('Non-Expiry', this)">Non-Expiry</button>
+            </div>
+            <div class="bundle-grid" id="bundle-container"></div>
+        </div>
+
+        <!-- VIEW 2: REAL-TIME AIRTIME PURCHASES FOR ALL NETWORKS -->
+        <div id="view-airtime" class="view-panel">
+            <div class="panel-card" style="max-width: 520px; margin: 0 auto;">
+                <h2 style="font-size: 1.15rem; margin-bottom: 0.4rem; color: var(--text-primary);">Instant Airtime Purchase</h2>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">Recharge airtime instantly for MTN, Telecel, or AT Ghana mobile numbers.</p>
+
+                <form id="airtime-form" onsubmit="initiateAirtimePurchase(event)">
+                    <div class="form-group">
+                        <label for="airtime-net">Network Provider</label>
+                        <select id="airtime-net" required>
+                            <option value="MTN">🟡 MTN Ghana</option>
+                            <option value="Telecel">🔴 Telecel Ghana</option>
+                            <option value="AT">🔵 AT Ghana (AirtelTigo)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="airtime-phone">Recipient Phone Number</label>
+                        <input type="tel" id="airtime-phone" placeholder="e.g. 024XXXXXXX" pattern="[0-9]{10}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="airtime-amount">Amount (GH₵)</label>
+                        <input type="number" id="airtime-amount" placeholder="e.g. 10.00" min="1" max="1000" step="0.5" required>
+                    </div>
+
+                    <label style="margin-bottom: 0.5rem;">Quick Amounts:</label>
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+                        <button type="button" class="quick-chip" onclick="setAirtimeAmount(5)">GH₵ 5</button>
+                        <button type="button" class="quick-chip" onclick="setAirtimeAmount(10)">GH₵ 10</button>
+                        <button type="button" class="quick-chip" onclick="setAirtimeAmount(20)">GH₵ 20</button>
+                        <button type="button" class="quick-chip" onclick="setAirtimeAmount(50)">GH₵ 50</button>
+                        <button type="button" class="quick-chip" onclick="setAirtimeAmount(100)">GH₵ 100</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="airtime-email">Email Address (For Receipt)</label>
+                        <input type="email" id="airtime-email" placeholder="e.g. customer@domain.com" required>
+                    </div>
+
+                    <button type="submit" class="btn-action" style="background: var(--success); font-weight: 700;">Purchase Airtime Now</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- VIEW 3: TRACK ORDER -->
+        <div id="view-track" class="view-panel">
+            <div class="panel-card">
+                <h2 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--text-primary);">Track Delivery Status</h2>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.2rem;">Enter your Order Reference or Tracking Code to verify network dispatch status.</p>
+                <div class="form-group">
+                    <label for="track-input">Reference / Order Code</label>
+                    <input type="text" id="track-input" placeholder="e.g. TRK-892301">
+                </div>
+                <button class="btn-action" onclick="trackTransaction()">Search Status</button>
+            </div>
+        </div>
+
+        <!-- VIEW 4: SUB-MERCHANT / AFFILIATE PORTAL -->
+        <div id="view-merchant" class="view-panel">
+            <div class="panel-card">
+                <h2 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--text-primary);">Sub-Merchant 10% Commission Hub</h2>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.2rem;">Generate your store referral link and earn a 10% commission routed to your registered merchant phone number.</p>
+
+                <div class="form-group">
+                    <label for="merchant-name">Merchant / Business Name</label>
+                    <input type="text" id="merchant-name" placeholder="e.g. ExpressData Store">
+                </div>
+                <div class="form-group">
+                    <label for="merchant-phone">Merchant Phone Number (For Commission Payouts)</label>
+                    <input type="tel" id="merchant-phone" placeholder="e.g. 024XXXXXXX" pattern="[0-9]{10}" required>
+                </div>
+                <button class="btn-action" onclick="generateMerchantLink()">Generate Store Link</button>
+
+                <div id="merchant-details" style="display: none; margin-top: 1.25rem; border-top: 1px solid var(--card-border); padding-top: 1.25rem;">
+                    <label>Your Sub-Merchant Store Link:</label>
+                    <input type="text" id="merchant-url-out" readonly style="background: var(--input-bg); cursor: pointer;" onclick="this.select()">
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <div style="flex: 1; background: var(--input-bg); border: 1px solid var(--card-border); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">Referral Sales</span>
+                            <div id="merchant-sales-count" style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">0</div>
+                        </div>
+                        <div style="flex: 1; background: var(--input-bg); border: 1px solid var(--card-border); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">Total Commission (10%)</span>
+                            <div id="merchant-earnings" style="font-size: 1.3rem; font-weight: 700; color: var(--success);">GH₵ 0.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 5: TRANSACTION HISTORY -->
+        <div id="view-history" class="view-panel">
+            <div class="panel-card">
+                <h2 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-primary);">Recent Orders & Payment Logs</h2>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date/Time</th>
+                                <th>Tracking ID</th>
+                                <th>Network</th>
+                                <th>Phone Number</th>
+                                <th>Package</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- BUNDLE CHECKOUT MODAL -->
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="modal-card">
+            <h2 style="font-size: 1.2rem; margin-bottom: 0.25rem; color: var(--text-primary);" id="modal-title">Checkout</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.2rem;">Confirm recipient details to dispatch data</p>
+
+            <form id="checkout-form" onsubmit="initiatePaystackPayment(event)">
+                <div class="form-group">
+                    <label for="cust-email">Email Address (For Paystack Receipt)</label>
+                    <input type="email" id="cust-email" placeholder="e.g. customer@domain.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone-number">Beneficiary Phone Number</label>
+                    <input type="tel" id="phone-number" placeholder="e.g. 024XXXXXXX" pattern="[0-9]{10}" required>
+                </div>
+
+                <div style="background: var(--input-bg); border: 1px solid var(--card-border); padding: 0.9rem; border-radius: 8px; margin-bottom: 1.2rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.4rem;">
+                        <span style="color: var(--text-secondary);">Item Summary:</span>
+                        <strong id="summary-size" style="color: var(--text-primary);">0 GB</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                        <span style="color: var(--text-secondary);">Total Payable:</span>
+                        <strong id="summary-price" style="color: var(--success);">GH₵ 0.00</strong>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="buy-btn" style="width: 50%; background: var(--success);">Pay with Paystack</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- UNIVERSAL NOTIFICATION POP-UP MODAL -->
+    <div class="modal-overlay" id="notification-modal">
+        <div class="modal-card">
+            <div id="notify-icon" class="popup-icon">ℹ️</div>
+            <div id="notify-title" class="popup-title">Notification</div>
+            <div id="notify-body" class="popup-body">Message content goes here.</div>
+            <button class="btn-action" onclick="closeNotification()">OK</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>DataExpress Ghana • Telco Reseller System © 2026</p>
+    </footer>
+
+    <!-- Firebase SDK Modules Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            doc, 
+            setDoc, 
+            getDoc, 
+            getDocs, 
+            updateDoc, 
+            increment, 
+            query, 
+            orderBy, 
+            where, 
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAguOHxCxsEUCUTEdI2Kw_YDCnw80CGDBU",
+            authDomain: "dataexpress-d41bc.firebaseapp.com",
+            projectId: "dataexpress-d41bc",
+            storageBucket: "dataexpress-d41bc.firebasestorage.app",
+            messagingSenderId: "344094681446",
+            appId: "1:344094681446:web:1c2d411b8a22b8291d40a7",
+            measurementId: "G-SB321CRSE4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Internet Bundles Database (Ghana Networks)
+        const bundleDatabase = {
+            'MTN': [
+                { size: '1 GB', validity: 'Daily', price: 6.00, cat: 'Daily' },
+                { size: '2 GB', validity: 'Daily', price: 10.00, cat: 'Daily' },
+                { size: '3.5 GB', validity: 'Daily', price: 15.00, cat: 'Daily' },
+                { size: '5 GB', validity: 'Weekly', price: 22.00, cat: 'Weekly' },
+                { size: '8 GB', validity: 'Weekly', price: 35.00, cat: 'Weekly' },
+                { size: '12 GB', validity: 'Weekly', price: 50.00, cat: 'Weekly' },
+                { size: '15 GB', validity: 'Monthly', price: 65.00, cat: 'Monthly' },
+                { size: '25 GB', validity: 'Monthly', price: 95.00, cat: 'Monthly' },
+                { size: '40 GB', validity: 'Monthly', price: 150.00, cat: 'Monthly' },
+                { size: '50 GB', validity: 'Non-Expiry', price: 180.00, cat: 'Non-Expiry' },
+                { size: '100 GB', validity: 'Non-Expiry', price: 340.00, cat: 'Non-Expiry' },
+                { size: '200 GB', validity: 'Non-Expiry', price: 620.00, cat: 'Non-Expiry' },
+                { size: 'SPECIAL 10 GB', validity: 'Offers', price: 30.00, cat: 'Offers' }
+            ],
+            'Telecel': [
+                { size: '1.2 GB', validity: 'Daily', price: 6.00, cat: 'Daily' },
+                { size: '2.5 GB', validity: 'Daily', price: 11.00, cat: 'Daily' },
+                { size: '4 GB', validity: 'Weekly', price: 18.00, cat: 'Weekly' },
+                { size: '7 GB', validity: 'Weekly', price: 30.00, cat: 'Weekly' },
+                { size: '10 GB', validity: 'Weekly', price: 42.00, cat: 'Weekly' },
+                { size: '18 GB', validity: 'Monthly', price: 70.00, cat: 'Monthly' },
+                { size: '30 GB', validity: 'Monthly', price: 110.00, cat: 'Monthly' },
+                { size: '50 GB', validity: 'Monthly', price: 170.00, cat: 'Monthly' },
+                { size: '80 GB', validity: 'Non-Expiry', price: 260.00, cat: 'Non-Expiry' },
+                { size: '150 GB', validity: 'Non-Expiry', price: 450.00, cat: 'Non-Expiry' },
+                { size: 'SPECIAL 20 GB', validity: 'Offers', price: 55.00, cat: 'Offers' }
+            ],
+            'AT': [
+                { size: '1.5 GB', validity: 'Non-Expiry', price: 5.00, cat: 'Daily' },
+                { size: '3 GB', validity: 'Non-Expiry', price: 11.00, cat: 'Daily' },
+                { size: '6 GB', validity: 'Non-Expiry', price: 22.00, cat: 'Weekly' },
+                { size: '10 GB', validity: 'Non-Expiry', price: 35.00, cat: 'Weekly' },
+                { size: '15 GB', validity: 'Non-Expiry', price: 50.00, cat: 'Monthly' },
+                { size: '25 GB', validity: 'Non-Expiry', price: 80.00, cat: 'Monthly' },
+                { size: '45 GB', validity: 'Non-Expiry', price: 130.00, cat: 'Monthly' },
+                { size: '100 GB', validity: 'Non-Expiry', price: 280.00, cat: 'Non-Expiry' },
+                { size: '200 GB', validity: 'Non-Expiry', price: 520.00, cat: 'Non-Expiry' },
+                { size: 'SPECIAL 12 GB', validity: 'Offers', price: 30.00, cat: 'Offers' }
+            ]
+        };
+
+        // State Management
+        let currentNetwork = 'MTN';
+        let currentCategory = 'All';
+        let selectedBundle = null;
+        let activeRefMerchant = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            checkMidnightReset();
+            updateDailySalesDisplay();
+            checkAffiliateRef();
+            renderBundles();
+            loadHistoryTable();
+            checkExistingMerchant();
+            updateHeaderSubscriptionStats();
+        });
+
+        // Theme Switcher Implementation
+        window.toggleTheme = function() {
+            const currentTheme = document.body.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('dx_theme', newTheme);
+            document.getElementById('theme-toggle').innerText = newTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
+        };
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('dx_theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-toggle').innerText = savedTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
+        }
+
+        // Header Active Subscriptions & Expiring Plans Calculator
+        async function updateHeaderSubscriptionStats() {
+            try {
+                const q = query(collection(db, "orders"), where("status", "==", "Completed"));
+                const querySnapshot = await getDocs(q);
+
+                let activeCount = 0;
+                let expiringCount = 0;
+                const now = new Date();
+
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    if (data.createdAt && data.validity) {
+                        const createdAt = data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.date);
+                        let durationDays = 0;
+
+                        if (data.validity === 'Daily') durationDays = 1;
+                        else if (data.validity === 'Weekly') durationDays = 7;
+                        else if (data.validity === 'Monthly') durationDays = 30;
+
+                        if (durationDays > 0) {
+                            const expiryDate = new Date(createdAt.getTime() + durationDays * 24 * 60 * 60 * 1000);
+                            const hoursLeft = (expiryDate - now) / (1000 * 60 * 60);
+
+                            if (hoursLeft > 0) {
+                                activeCount++;
+                                if (hoursLeft <= 24) {
+                                    expiringCount++;
+                                }
+                            }
+                        }
+                    }
+                });
+
+                document.getElementById('active-subs-count').innerText = activeCount;
+                document.getElementById('expiring-plans-count').innerText = expiringCount;
+            } catch (err) {
+                console.error("Error updating subscription header statistics: ", err);
+            }
+        }
+
+        // Daily Sales Calculation & Midnight Auto-Reset
+        function checkMidnightReset() {
+            const today = new Date().toDateString();
+            const lastDate = localStorage.getItem('dx_last_sales_date');
+
+            if (lastDate !== today) {
+                localStorage.setItem('dx_last_sales_date', today);
+                localStorage.setItem('dx_daily_sales_total', '0');
+            }
+        }
+
+        function recordSale(amount) {
+            checkMidnightReset();
+            let currentSales = parseFloat(localStorage.getItem('dx_daily_sales_total') || '0');
+            currentSales += amount;
+            localStorage.setItem('dx_daily_sales_total', currentSales.toString());
+            updateDailySalesDisplay();
+        }
+
+        function updateDailySalesDisplay() {
+            checkMidnightReset();
+            const sales = parseFloat(localStorage.getItem('dx_daily_sales_total') || '0');
+            document.getElementById('daily-sales-amount').innerText = `GH₵ ${sales.toFixed(2)}`;
+        }
+
+        // Airtime Quick Fill Helper
+        window.setAirtimeAmount = function(amt) {
+            document.getElementById('airtime-amount').value = amt.toFixed(2);
+        };
+
+        // Universal Popup Notification System
+        window.showNotification = function(title, message, icon = 'ℹ️') {
+            document.getElementById('notify-title').innerText = title;
+            document.getElementById('notify-body').innerText = message;
+            document.getElementById('notify-icon').innerText = icon;
+            document.getElementById('notification-modal').style.display = 'flex';
+        };
+
+        window.closeNotification = function() {
+            document.getElementById('notification-modal').style.display = 'none';
+        };
+
+        function checkAffiliateRef() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ref = urlParams.get('ref');
+            const merchantBtn = document.getElementById('nav-merchant-btn');
+            const offersBanner = document.getElementById('active-offers-container');
+
+            if (ref) {
+                activeRefMerchant = ref;
+                merchantBtn.style.display = 'none';
+                if (offersBanner) offersBanner.style.display = 'none';
+            } else {
+                merchantBtn.style.display = 'inline-block';
+                if (offersBanner) offersBanner.style.display = 'block';
+            }
+        }
+
+        // Tab Navigation
+        window.showView = function(viewId, btn) {
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            if(btn) btn.classList.add('active');
+
+            const netBar = document.getElementById('network-bar-container');
+            netBar.style.display = (viewId === 'view-bundles') ? 'flex' : 'none';
+        };
+
+        // Network Selection
+        window.selectNetwork = function(net) {
+            currentNetwork = net;
+            document.getElementById('btn-mtn').className = `net-btn ${net === 'MTN' ? 'active-mtn' : ''}`;
+            document.getElementById('btn-telecel').className = `net-btn ${net === 'Telecel' ? 'active-telecel' : ''}`;
+            document.getElementById('btn-at').className = `net-btn ${net === 'AT' ? 'active-at' : ''}`;
+            renderBundles();
+        };
+
+        // Category Filtering
+        window.filterCategory = function(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            renderBundles();
+        };
+
+        // Render Store Data Cards
+        function renderBundles() {
+            const container = document.getElementById('bundle-container');
+            container.innerHTML = '';
+
+            let list = bundleDatabase[currentNetwork];
+            
+            // Exclude Active Offers from the list if viewing as a merchant/ref
+            if (activeRefMerchant) {
+                list = list.filter(b => b.cat !== 'Offers');
+            }
+
+            if (currentCategory !== 'All') {
+                list = list.filter(b => b.cat === currentCategory);
+            }
+
+            if (list.length === 0) {
+                container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 2rem;">No packages found in this category.</p>`;
+                return;
+            }
+
+            list.forEach(b => {
+                const card = document.createElement('div');
+                card.className = 'bundle-card';
+                card.innerHTML = `
+                    <div class="bundle-size">${b.size}</div>
+                    <div class="bundle-validity">${b.validity} Package</div>
+                    <div class="bundle-price">GH₵ ${b.price.toFixed(2)}</div>
+                    <button class="buy-btn" onclick='openModal(${JSON.stringify(b)})'>Purchase Bundle</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Modal Operations
+        window.openModal = function(bundle) {
+            selectedBundle = bundle;
+            document.getElementById('modal-title').innerText = `${currentNetwork} - ${bundle.size}`;
+            document.getElementById('summary-size').innerText = bundle.size;
+            document.getElementById('summary-price').innerText = `GH₵ ${bundle.price.toFixed(2)}`;
+            document.getElementById('checkout-modal').style.display = 'flex';
+        };
+
+        window.closeModal = function() {
+            document.getElementById('checkout-modal').style.display = 'none';
+            document.getElementById('checkout-form').reset();
+        };
+
+        // Paystack Airtime Checkout Function
+        window.initiateAirtimePurchase = function(e) {
+            e.preventDefault();
+
+            const net = document.getElementById('airtime-net').value;
+            const phone = document.getElementById('airtime-phone').value;
+            const amount = parseFloat(document.getElementById('airtime-amount').value);
+            const email = document.getElementById('airtime-email').value;
+
+            if (!amount || amount <= 0) {
+                showNotification("Invalid Amount", "Please enter a valid airtime amount.", "⚠️");
+                return;
+            }
+
+            currentNetwork = net;
+            selectedBundle = {
+                size: `GH₵ ${amount.toFixed(2)} Airtime`,
+                validity: 'Instant Top-Up',
+                price: amount
+            };
+
+            const trackingCode = 'TRK-AIR-' + Math.floor(100000 + Math.random() * 900000);
+            const amountInPesewas = Math.round(amount * 100);
+            const PAYSTACK_PUBLIC_KEY = 'pk_test_83ef5571585074d04c4e27091aa867e1db960ed6';
+
+            const handler = PaystackPop.setup({
+                key: PAYSTACK_PUBLIC_KEY,
+                email: email,
+                amount: amountInPesewas,
+                currency: 'GHS',
+                ref: trackingCode,
+                metadata: {
+                    custom_fields: [
+                        { display_name: "Phone Number", variable_name: "phone_number", value: phone },
+                        { display_name: "Network Provider", variable_name: "network", value: net },
+                        { display_name: "Purchase Type", variable_name: "purchase_type", value: "Airtime" },
+                        { display_name: "Airtime Amount", variable_name: "bundle_size", value: `GH₵ ${amount.toFixed(2)}` },
+                        { display_name: "Merchant Ref", variable_name: "merchant_ref", value: activeRefMerchant || "Direct" }
+                    ]
+                },
+                callback: function(response) {
+                    completeOrderProcess(response.reference, phone, email);
+                },
+                onClose: function() {
+                    completeOrderProcess(trackingCode, phone, email);
+                }
+            });
+
+            handler.openIframe();
+        };
+
+        // Paystack Data Bundle Checkout Integration
+        window.initiatePaystackPayment = function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('cust-email').value;
+            const phone = document.getElementById('phone-number').value;
+            const trackingCode = 'TRK-' + Math.floor(100000 + Math.random() * 900000);
+            const amountInPesewas = Math.round(selectedBundle.price * 100);
+
+            const PAYSTACK_PUBLIC_KEY = 'pk_test_83ef5571585074d04c4e27091aa867e1db960ed6';
+
+            const handler = PaystackPop.setup({
+                key: PAYSTACK_PUBLIC_KEY,
+                email: email,
+                amount: amountInPesewas,
+                currency: 'GHS',
+                ref: trackingCode,
+                metadata: {
+                    custom_fields: [
+                        { display_name: "Phone Number", variable_name: "phone_number", value: phone },
+                        { display_name: "Network", variable_name: "network", value: currentNetwork },
+                        { display_name: "Bundle Size", variable_name: "bundle_size", value: selectedBundle.size },
+                        { display_name: "Merchant Ref", variable_name: "merchant_ref", value: activeRefMerchant || "Direct" }
+                    ]
+                },
+                callback: function(response) {
+                    completeOrderProcess(response.reference, phone, email);
+                },
+                onClose: function() {
+                    completeOrderProcess(trackingCode, phone, email);
+                }
+            });
+
+            handler.openIframe();
+        };
+
+        // Save & Record Order in Firebase Cloud Firestore
+        async function completeOrderProcess(trackingCode, phone, email) {
+            const dateStr = new Date().toLocaleString();
+            const newOrder = {
+                id: trackingCode,
+                date: dateStr,
+                createdAt: serverTimestamp(),
+                network: currentNetwork,
+                phone: phone,
+                email: email,
+                bundle: selectedBundle.size,
+                validity: selectedBundle.validity,
+                price: selectedBundle.price,
+                merchant: activeRefMerchant || 'Direct',
+                status: 'Completed'
+            };
+
+            try {
+                await setDoc(doc(db, "orders", trackingCode), newOrder);
+                
+                recordSale(selectedBundle.price);
+
+                if (activeRefMerchant) {
+                    await creditMerchantCommission(activeRefMerchant, selectedBundle.price);
+                }
+
+                loadHistoryTable();
+                updateHeaderSubscriptionStats();
+                closeModal();
+
+                showNotification(
+                    "Payment Successful!",
+                    `Tracking Code: ${trackingCode}\nBeneficiary: ${phone}\nPackage / Amount: ${selectedBundle.size}\nNetwork: ${currentNetwork}\n\nYour transaction has been dispatched in real-time.`,
+                    "✅"
+                );
+            } catch (err) {
+                console.error("Firebase Storage Error: ", err);
+                showNotification("Database Error", "Could not save order data to Cloud Storage.", "❌");
+            }
+        }
+
+        // Sub-Merchant Referral & Link Generator with Commission Phone Integration
+        window.generateMerchantLink = async function() {
+            const name = document.getElementById('merchant-name').value.trim();
+            const phone = document.getElementById('merchant-phone').value.trim();
+
+            if (!name || !phone) {
+                showNotification("Input Required", "Please enter both business name and merchant phone number.", "⚠️");
+                return;
+            }
+
+            const merchantSlug = name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+            const merchantRef = doc(db, "merchants", merchantSlug);
+
+            try {
+                const docSnap = await getDoc(merchantRef);
+                let merchantData;
+
+                if (!docSnap.exists()) {
+                    merchantData = {
+                        id: merchantSlug,
+                        name: name,
+                        payoutPhone: phone,
+                        salesCount: 0,
+                        earnings: 0.00,
+                        createdAt: serverTimestamp()
+                    };
+                    await setDoc(merchantRef, merchantData);
+                } else {
+                    await updateDoc(merchantRef, { payoutPhone: phone });
+                    merchantData = docSnap.data();
+                    merchantData.payoutPhone = phone;
+                }
+
+                localStorage.setItem('dataexpress_active_merchant_id', merchantSlug);
+                displayMerchantInfo(merchantData);
+                showNotification("Merchant Link Ready", "Your custom referral link has been generated below. Commissions will be sent to " + phone, "🎉");
+            } catch (err) {
+                console.error("Firebase Merchant Save Error: ", err);
+                showNotification("Database Error", "Failed to register merchant on Cloud Storage.", "❌");
+            }
+        };
+
+        async function checkExistingMerchant() {
+            const localMerchantId = localStorage.getItem('dataexpress_active_merchant_id');
+            if (localMerchantId) {
+                try {
+                    const docSnap = await getDoc(doc(db, "merchants", localMerchantId));
+                    if (docSnap.exists()) {
+                        displayMerchantInfo(docSnap.data());
+                    }
+                } catch (err) {
+                    console.error("Error loading merchant details: ", err);
+                }
+            }
+        }
+
+        function displayMerchantInfo(m) {
+            document.getElementById('merchant-details').style.display = 'block';
+            if (m.name) document.getElementById('merchant-name').value = m.name;
+            if (m.payoutPhone) document.getElementById('merchant-phone').value = m.payoutPhone;
+            
+            const storeUrl = `${window.location.origin}${window.location.pathname}?ref=${m.id}`;
+            document.getElementById('merchant-url-out').value = storeUrl;
+            document.getElementById('merchant-sales-count').innerText = m.salesCount || 0;
+            document.getElementById('merchant-earnings').innerText = `GH₵ ${(m.earnings || 0).toFixed(2)}`;
+        }
+
+        async function creditMerchantCommission(merchantId, orderAmount) {
+            const merchantRef = doc(db, "merchants", merchantId);
+            try {
+                const docSnap = await getDoc(merchantRef);
+                if (docSnap.exists()) {
+                    const commissionAmount = orderAmount * 0.10;
+                    await updateDoc(merchantRef, {
+                        salesCount: increment(1),
+                        earnings: increment(commissionAmount)
+                    });
+
+                    // Log commission record with merchant's payout phone number
+                    const merchantData = docSnap.data();
+                    const commRef = doc(collection(db, "commissions"));
+                    await setDoc(commRef, {
+                        merchantId: merchantId,
+                        merchantPhone: merchantData.payoutPhone || "N/A",
+                        amount: commissionAmount,
+                        orderAmount: orderAmount,
+                        timestamp: serverTimestamp()
+                    });
+                    
+                    const updatedSnap = await getDoc(merchantRef);
+                    if (localStorage.getItem('dataexpress_active_merchant_id') === merchantId) {
+                        displayMerchantInfo(updatedSnap.data());
+                    }
+                }
+            } catch (err) {
+                console.error("Commission Update Error: ", err);
+            }
+        }
+
+        // Live Order Tracking via Cloud Firestore
+        window.trackTransaction = async function() {
+            const queryVal = document.getElementById('track-input').value.trim();
+
+            if (!queryVal) {
+                showNotification("Missing Query", "Please enter a valid tracking code or phone number.", "⚠️");
+                return;
+            }
+
+            try {
+                const docSnap = await getDoc(doc(db, "orders", queryVal));
+                
+                if (docSnap.exists()) {
+                    const found = docSnap.data();
+                    showNotification(
+                        "Order Found",
+                        `Reference: ${found.id}\nNetwork: ${found.network}\nRecipient: ${found.phone}\nItem: ${found.bundle} (${found.validity})\nAmount: GH₵ ${found.price.toFixed(2)}\nStatus: ${found.status}`,
+                        "🔍"
+                    );
+                    return;
+                }
+
+                const q = query(collection(db, "orders"), where("phone", "==", queryVal));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    const found = querySnapshot.docs[0].data();
+                    showNotification(
+                        "Order Found",
+                        `Reference: ${found.id}\nNetwork: ${found.network}\nRecipient: ${found.phone}\nItem: ${found.bundle} (${found.validity})\nAmount: GH₵ ${found.price.toFixed(2)}\nStatus: ${found.status}`,
+                        "🔍"
+                    );
+                } else {
+                    showNotification("Not Found", `No transaction found matching reference: ${queryVal}`, "❌");
+                }
+            } catch (err) {
+                console.error("Tracking Error: ", err);
+                showNotification("Database Error", "Unable to query tracking data from Cloud Server.", "❌");
+            }
+        };
+
+        // Fetch Orders from Cloud Firestore
+        async function loadHistoryTable() {
+            const tbody = document.getElementById('history-table-body');
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-secondary);">Loading records...</td></tr>';
+
+            try {
+                const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                tbody.innerHTML = '';
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-secondary);">No transactions logged yet.</td></tr>`;
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const o = doc.data();
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${o.date || ''}</td>
+                        <td><strong>${o.id || doc.id}</strong></td>
+                        <td>${o.network || ''}</td>
+                        <td>${o.phone || ''}</td>
+                        <td>${o.bundle || ''}</td>
+                        <td>GH₵ ${(o.price || 0).toFixed(2)}</td>
+                        <td><span class="badge-status-p status-success">${o.status || 'Completed'}</span></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error("Error Loading History: ", err);
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--danger);">Error loading order history.</td></tr>`;
+            }
+        }
+    </script>
+</body>
+</html>
