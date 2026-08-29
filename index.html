@@ -829,15 +829,17 @@
             serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAguOHxCxsEUCUTEdI2Kw_YDCnw80CGDBU",
-            authDomain: "dataexpress-d41bc.firebaseapp.com",
-            projectId: "dataexpress-d41bc",
-            storageBucket: "dataexpress-d41bc.firebasestorage.app",
-            messagingSenderId: "344094681446",
-            appId: "1:344094681446:web:1c2d411b8a22b8291d40a7",
-            measurementId: "G-SB321CRSE4"
-        };
+       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAguOHxCxsEUCUTEdI2Kw_YDCnw80CGDBU",
+  authDomain: "dataexpress-d41bc.firebaseapp.com",
+  databaseURL: "https://dataexpress-d41bc-default-rtdb.firebaseio.com",
+  projectId: "dataexpress-d41bc",
+  storageBucket: "dataexpress-d41bc.firebasestorage.app",
+  messagingSenderId: "344094681446",
+  appId: "1:344094681446:web:1c2d411b8a22b8291d40a7",
+  measurementId: "G-SB321CRSE4"
+};
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
