@@ -1091,6 +1091,66 @@
                 tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--danger);">Error loading active plans.</td></tr>`;
             }
         }
+
+        // Backend script ==================================================================================
+
+        const BACKEND_URL = "https://your-backend-api-domain.com"; // Replace with your deployed backend server URL
+
+async function handleCheckoutSubmit(event) {
+    event.preventDefault();
+
+    const recipientPhone = document.getElementById("recipient-phone").value;
+    const network = document.getElementById("network-select").value;
+    const packageId = document.getElementById("package-select").value;
+    const amount = document.getElementById("package-price").value;
+    const email = document.getElementById("user-email").value;
+
+    showNotification("Initializing payment session...");
+
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/checkout/initialize`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                amount: parseFloat(amount),
+                recipientPhone: recipientPhone,
+                network: network,
+                packageId: packageId
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.authorization_url) {
+            // Redirect user to Paystack live checkout screen
+            window.location.href = data.authorization_url;
+        } else {
+            showNotification("Failed to start payment. Please try again.");
+        }
+    } catch (err) {
+        console.error("Payment initialization error:", err);
+        showNotification("Connection error. Please check your network.");
+    }
+}
+
+// Track Data Delivery Status Function
+async function trackOrderStatus(orderRef) {
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/orders/track/${orderRef}`);
+        const orderData = await res.json();
+
+        if (res.ok) {
+            updateTrackingTable(orderData);
+        } else {
+            showNotification(orderData.message || "Tracking ID not found.");
+        }
+    } catch (error) {
+        showNotification("Unable to fetch order status.");
+    }
+}
     </script>
 </body>
 </html>
