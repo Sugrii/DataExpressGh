@@ -835,7 +835,7 @@
             const trackingCode = 'TRK-' + Math.floor(100000 + Math.random() * 900000);
             const amountInPesewas = Math.round(selectedBundle.price * 100);
 
-            const PAYSTACK_PUBLIC_KEY = 'pk_live_b44da3922fb7fc9522b23a5f1570732ea35d2adb';
+            const PAYSTACK_PUBLIC_KEY = '';
 
             const handler = PaystackPop.setup({
                 key: PAYSTACK_PUBLIC_KEY,
@@ -1094,7 +1094,7 @@
 
         // Backend script ==================================================================================
 
-        const BACKEND_URL = "https://your-backend-api-domain.com"; // Replace with your deployed backend server URL
+        const BACKEND_URL = "https://data-express-gh-backend.vercel.app/"; // Replace with your deployed backend server URL
 
 async function handleCheckoutSubmit(event) {
     event.preventDefault();
